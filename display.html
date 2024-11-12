@@ -1,0 +1,123 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOD Tracker - Display</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>WOD Tracker - Display</h1>
+        <nav>
+            <a href="input.html">Update WOD and Scores</a>
+        </nav>
+    </header>
+
+    <!-- Announcements Section -->
+    <section id="announcements">
+        <h2>Announcements</h2>
+        <div id="announcement-content">
+            <!-- Announcements will be displayed here -->
+        </div>
+    </section>
+
+    <!-- WOD Display Section -->
+    <section id="home">
+        <h2>Today's WOD</h2>
+        <div id="wod">
+            <div id="warmup">
+                <p><strong>Warm-up:</strong> <span id="warmup-name"></span></p>
+            </div>
+            <div id="preworkout">
+                <p><strong>Pre-workout:</strong> <span id="preworkout-name"></span></p>
+            </div>
+            <div id="workout">
+                <p><strong>Workout of the Day:</strong> <span id="wod-name"></span></p>
+            </div>
+            <div id="timer-info">
+                <p><strong>Timer Type:</strong> <span id="timer-type"></span></p>
+            </div>
+        </div>
+    </section>
+
+    <!-- User Scores Display -->
+    <section id="user-scores">
+        <h3>User Scores</h3>
+        <table id="scores-table">
+            <thead>
+                <tr>
+                    <th>Username</th>
+                    <th>Score</th>
+                    <th>Time Block</th>
+                </tr>
+            </thead>
+            <tbody id="scores-list">
+                <!-- User scores will be populated here -->
+            </tbody>
+        </table>
+    </section>
+
+    <script>
+        window.onload = function() {
+            // Retrieve WOD and Announcement data
+            let warmup = localStorage.getItem('warmup');
+            let preworkout = localStorage.getItem('preworkout');
+            let wod = localStorage.getItem('wod');
+            let timerType = localStorage.getItem('timerType');
+            let announcement = localStorage.getItem('announcement');
+
+            // Display WOD data
+            if (warmup && preworkout && wod && timerType) {
+                document.getElementById('warmup-name').textContent = warmup;
+                document.getElementById('preworkout-name').textContent = preworkout;
+                document.getElementById('wod-name').textContent = wod;
+                document.getElementById('timer-type').textContent = timerType;
+            } else {
+                document.getElementById('warmup-name').textContent = "No WOD details available";
+                document.getElementById('preworkout-name').textContent = "No WOD details available";
+                document.getElementById('wod-name').textContent = "No WOD details available";
+                document.getElementById('timer-type').textContent = "No WOD details available";
+            }
+
+            // Display Announcement
+            if (announcement) {
+                document.getElementById('announcement-content').textContent = announcement;
+            } else {
+                document.getElementById('announcement-content').textContent = "No announcements available.";
+            }
+
+            // Retrieve and display user scores
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            let scoresList = document.getElementById('scores-list');
+
+            if (users.length === 0) {
+                let row = document.createElement('tr');
+                let noDataCell = document.createElement('td');
+                noDataCell.colSpan = 3;
+                noDataCell.textContent = "No users added.";
+                row.appendChild(noDataCell);
+                scoresList.appendChild(row);
+            } else {
+                users.forEach(user => {
+                    let row = document.createElement('tr');
+                    let usernameCell = document.createElement('td');
+                    let scoreCell = document.createElement('td');
+                    let timeBlockCell = document.createElement('td');
+                    
+                    usernameCell.textContent = user.username;
+                    timeBlockCell.textContent = user.timeBlock;
+                    
+                    // Placeholder score for now (could be updated later)
+                    scoreCell.textContent = "N/A"; // Placeholder, replace with actual scores if available
+                    
+                    row.appendChild(usernameCell);
+                    row.appendChild(scoreCell);
+                    row.appendChild(timeBlockCell);
+                    scoresList.appendChild(row);
+                });
+            }
+        };
+    </script>
+</body>
+</html>

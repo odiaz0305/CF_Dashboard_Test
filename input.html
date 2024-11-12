@@ -1,0 +1,110 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOD Tracker - Input</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>WOD Tracker</h1>
+        <nav>
+            <a href="display.html">View WOD and Scores</a>
+            <a href="submit_score.html">Submit Score</a>
+        </nav>
+    </header>
+
+    <!-- WOD Update Form -->
+    <section id="update-wod">
+        <h3>Update Today's WOD</h3>
+        <form id="wod-form">
+            <label for="new-warmup-name">Warm-up:</label>
+            <input type="text" id="new-warmup-name" placeholder="Enter warm-up details">
+            
+            <label for="new-preworkout-name">Pre-workout:</label>
+            <input type="text" id="new-preworkout-name" placeholder="Enter pre-workout details">
+
+            <label for="new-wod-name">Workout of the Day:</label>
+            <input type="text" id="new-wod-name" placeholder="Enter WOD name">
+
+            <label for="timer-type">Timer Type:</label>
+            <select id="timer-type">
+                <option value="timer">Timer</option>
+                <option value="countdown">Countdown</option>
+                <option value="emom">EMOM</option>
+            </select>
+            
+            <button type="button" onclick="updateWOD()">Update WOD</button>
+        </form>
+    </section>
+
+    <!-- Announcement Update -->
+    <section id="announcements-input">
+        <h3>Update Announcements</h3>
+        <input type="text" id="announcement-input" placeholder="Enter announcement">
+        <button type="button" onclick="updateAnnouncements()">Update Announcement</button>
+    </section>
+
+    <!-- Add User Form (No Score) -->
+    <div id="add-user">
+        <h3>Add Users to Time Block</h3>
+        <form id="user-form">
+            <label for="username">Username:</label>
+            <input type="text" id="username" name="username">
+    
+            <label for="time-block">Time Block:</label>
+            <select id="time-block" name="time-block">
+                <option value="5am">5 AM</option>
+                <option value="6am">6 AM</option>
+                <option value="7am">7 AM</option>
+                <option value="9am">9 AM</option>
+                <option value="430pm">4:30 PM</option>
+                <option value="530pm">5:30 PM</option>
+                <option value="630pm">6:30 PM</option>
+            </select>
+
+            <button type="button" onclick="addUser()">Add User</button>
+        </form>
+    </div>
+
+    <script>
+        function updateWOD() {
+            let warmupInput = document.getElementById('new-warmup-name').value;
+            let preworkoutInput = document.getElementById('new-preworkout-name').value;
+            let wodInput = document.getElementById('new-wod-name').value;
+            let timerType = document.getElementById('timer-type').value;
+
+            // Save WOD data in localStorage
+            localStorage.setItem('warmup', warmupInput);
+            localStorage.setItem('preworkout', preworkoutInput);
+            localStorage.setItem('wod', wodInput);
+            localStorage.setItem('timerType', timerType);
+
+            alert("WOD updated!");
+        }
+
+        function addUser() {
+            let username = document.getElementById('username').value;
+            let timeBlock = document.getElementById('time-block').value;
+
+            if (username !== "") {
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+                users.push({ username, timeBlock, score: "" }); // Initialize score as empty
+                localStorage.setItem('users', JSON.stringify(users));
+
+                // Clear form inputs after adding user
+                document.getElementById('username').value = "";
+                alert("User added!");
+            } else {
+                alert("Please enter a username.");
+            }
+        }
+
+        function updateAnnouncements() {
+            let announcement = document.getElementById('announcement-input').value;
+            localStorage.setItem('announcement', announcement);
+        }
+    </script>
+</body>
+</html>

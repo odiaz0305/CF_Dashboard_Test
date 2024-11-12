@@ -1,0 +1,75 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>WOD Tracker - Submit Score</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <h1>Submit Scores</h1>
+        <nav>
+            <a href="display.html">View WOD and Scores</a>
+            <a href="input.html">Update WOD and Users</a>
+        </nav>
+    </header>
+
+    <!-- Score Submission Form -->
+    <section id="submit-score">
+        <h3>Submit Score for User</h3>
+        <form id="score-form">
+            <label for="user-select">Select User:</label>
+            <select id="user-select">
+                <!-- Users will be dynamically loaded here -->
+            </select>
+
+            <label for="score">Score:</label>
+            <input type="text" id="score" placeholder="Enter score">
+
+            <button type="button" onclick="submitScore()">Submit Score</button>
+        </form>
+    </section>
+
+    <script>
+        // Load users into the dropdown
+        window.onload = function() {
+            let users = JSON.parse(localStorage.getItem('users')) || [];
+            let userSelect = document.getElementById('user-select');
+
+            users.forEach(user => {
+                let option = document.createElement('option');
+                option.value = user.username;
+                option.textContent = user.username;
+                userSelect.appendChild(option);
+            });
+        };
+
+        // Function to submit the score for a selected user
+        function submitScore() {
+            let selectedUser = document.getElementById('user-select').value;
+            let score = document.getElementById('score').value;
+
+            if (selectedUser && score) {
+                let users = JSON.parse(localStorage.getItem('users')) || [];
+                
+                // Update the score for the selected user
+                users = users.map(user => {
+                    if (user.username === selectedUser) {
+                        user.score = score;
+                    }
+                    return user;
+                });
+
+                // Save updated users data to localStorage
+                localStorage.setItem('users', JSON.stringify(users));
+
+                alert("Score submitted successfully!");
+                document.getElementById('score').value = ""; // Clear the score input
+            } else {
+                alert("Please select a user and enter a score.");
+            }
+        }
+    </script>
+</body>
+</html>
